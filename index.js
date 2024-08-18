@@ -7,7 +7,10 @@ require("dotenv").config();
 
 //middleware to parse json request body
 server.use(express.json());
-server.use(fileUpload());
+server.use(fileUpload({
+    useTempFiles : true,
+    tempFileDir : '/tmp/'
+}));
 
 //start server
 const PORT = process.env.PORT || 4000;
