@@ -150,3 +150,67 @@ exports.vidUpload = async (req,res)=>{
         )
     }
 }
+
+// Issue:the img is being compressed to the same size
+exports.imgCompressUpload = async(req,res)=>{
+
+    try{
+    
+         // Fetching
+         const {name,email,tags} = req.body;
+
+         const img = req.files.imgFile;
+ 
+         // Validation
+ 
+         const format = img.name.split('.')[1];
+         const supportedFormats = ['jpg',"jpeg","png"];
+ 
+         if(!supportedFormats.includes(format)){
+             return res.status(400).json(
+                 {
+                     sucess:false,
+                     url:img.secure_url,
+                     message:"File format not supported"
+                 }
+         )}
+ 
+         // Saving in cloudinary
+ 
+         const options = {
+             folder:"assets",
+             resource_type: "auto",
+             quality:50
+         }
+ 
+         const response = await cloudinary.v2.uploader.upload(img.tempFilePath,options);
+ 
+         const file = new File({
+             name,
+             email,
+             tags,
+             link:response.secure_url
+         })
+ 
+         const data = await file.save();
+ 
+         console.log(response)
+ 
+         return res.status(200).json({
+             sucess:true,
+             link:response.secure_url,
+             message:"File uploaded sucessfully"
+         })
+ 
+        
+    }
+    catch(e){
+        res.status(500).json(
+            {
+                sucess:false,
+                message:e.message
+            }
+        )
+    }
+
+}
