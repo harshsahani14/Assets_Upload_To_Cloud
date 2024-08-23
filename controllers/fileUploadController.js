@@ -1,19 +1,6 @@
 const cloudinary  = require("cloudinary");
 const File = require("../models/file");
 
-async function uploadToCloud(file,folder,quality){
-
-    const options = {folder};
-
-    if(quality){
-        options.quality=quality
-    }
-    
-    const result = await cloudinary.v2.uploader.upload(file,options);
-
-    return result
-}
-
 exports.localFileUpload = async (req,res) =>{
 
     try{
@@ -166,8 +153,6 @@ exports.vidUpload = async (req,res)=>{
 }
 
 
-
-// Issue:the img is being compressed to the same size
 exports.imgCompressUpload = async(req,res)=>{
 
     try{
@@ -192,10 +177,16 @@ exports.imgCompressUpload = async(req,res)=>{
          )}
  
          // Saving in cloudinary
- 
-         const response = await uploadToCloud(img.tempFilePath,"assets",90)
- 
-         const file = new File({
+         const options = {
+            folder:"assets",
+            resource_type: "auto",
+            format:"jpg",
+            quality:50
+        }
+
+        const response = await cloudinary.v2.uploader.upload(img.tempFilePath,options);
+
+        const file = new File({
              name,
              email,
              tags,
