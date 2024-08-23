@@ -36,7 +36,7 @@ FileSchema.post('save', async (doc)=>{
             from:process.env.USER_MAIL,
             to:doc.email,
             subject:'File upload',
-            html:`<h1>Cloudinary upload</h1> <p>Your File has been uploaded on <a href=${doc.link}>${doc.link}</a> </p>`
+            html:`<h1>Cloudinary upload</h1> <p>Your File has been uploaded on cloudinary.Link of the image <a href=${doc.link}>${doc.link}</a> </p>`
         })
 
         console.log(result);
