@@ -1,4 +1,4 @@
-const cloudinary  = require("cloudinary").v2;
+const cloudinary  = require("cloudinary");
 const File = require("../models/file");
 
 async function uploadToCloud(file,folder,quality){
@@ -9,7 +9,7 @@ async function uploadToCloud(file,folder,quality){
         options.quality=quality
     }
     
-    const result = await cloudinary.uploader.upload(file,options);
+    const result = await cloudinary.v2.uploader.upload(file,options);
 
     return result
 }
